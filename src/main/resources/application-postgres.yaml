@@ -1,0 +1,11 @@
+spring:
+    datasource:
+        # Postgres
+        url: jdbc:postgresql://petrtitov.com:35432/restaurant_vote
+        #    tcp: jdbc:h2:tcp://localhost:9092/mem:voting
+        username: hibernate
+        password: hibernate
+    jpa:
+        hibernate:
+            ddl-auto: none
+        defer-datasource-initialization: true

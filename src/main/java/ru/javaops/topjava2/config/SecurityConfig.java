@@ -21,8 +21,8 @@ import ru.javaops.topjava2.web.AuthUser;
 
 import java.util.Optional;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 @Slf4j
 @AllArgsConstructor
 public class SecurityConfig {

@@ -1,5 +1,17 @@
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
+  profiles.active:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  mvc:
+    view:
+      suffix: .jsp
+      prefix: /WEB-INF/jsp/
+    servlet:
+      path: /
+  messages:
+    basename: "file:config/messages/messages"
+
   jpa:
     show-sql: true
     open-in-view: false
@@ -14,6 +26,14 @@ spring:
         default_batch_fetch_size: 20
         # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
         jdbc.batch_size: 20
+        hbm2ddl.auto: none
+#      javax:
+#        persistence:
+#          schema-generation:
+#            scripts:
+#              create-target: C:/Users/vizuser/IdeaProjects/topjava2/src/create.ddl
+#              drop-target: C:/Users/vizuser/IdeaProjects/topjava2/src/drop.ddl
+#              action: drop-and-create
   datasource:
     # ImMemory
     url: jdbc:h2:mem:voting
@@ -36,7 +56,7 @@ spring:
 
 logging:
   level:
-    root: WARN
+    root: info
     ru.javaops.topjava2: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
@@ -45,5 +65,6 @@ server.servlet:
     charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
     enabled: true # Enable http encoding support
     force: true
+  context-path: /
 
-springdoc.swagger-ui.path: /
+#springdoc.swagger-ui.path: /
