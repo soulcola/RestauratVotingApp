@@ -1,10 +1,8 @@
 package ru.javaops.topjava2.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Vote;
 import ru.javaops.topjava2.testdata.RestaurantTestData;
 
@@ -41,11 +39,11 @@ class VoteServiceTest extends AbstractServiceTest {
         VOTE_MATCHER.assertMatch(service.get(newId), newVote);
     }
 
-//    @Test
-//    void createTwice() {
-//        service.create(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now());
-//        assertThrows(IllegalArgumentException.class, () -> service.create(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now()));
-//    }
+    @Test
+    void createUserVoteTwice() {
+        service.saveUserVote(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now());
+        assertThrows(IllegalArgumentException.class, () -> service.saveUserVote(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now()));
+    }
 
 //    @Test
 //    void update() {

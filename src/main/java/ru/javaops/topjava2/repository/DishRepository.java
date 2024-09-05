@@ -2,7 +2,6 @@ package ru.javaops.topjava2.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Dish;
@@ -22,9 +21,12 @@ public interface DishRepository extends BaseRepository<Dish> {
     Optional<Dish> findByIdAndRestaurantID(@Param("id") int id,
                                            @Param("restaurantId") int restaurantId);
 
-    default Dish getByIdAndRestaurantId(int id, int restaurantId){
+    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId")
+    List<Dish> getAllByRestaurantId(@Param("restaurantId") int restaurantId);
+
+    default Dish getByIdAndRestaurantId(int id, int restaurantId) {
         return findByIdAndRestaurantID(id, restaurantId)
-                .orElseThrow(()-> new NotFoundException("Dish with id " + id +
+                .orElseThrow(() -> new NotFoundException("Dish with id " + id +
                         " and restaurant id " + restaurantId + " not found"));
     }
 }

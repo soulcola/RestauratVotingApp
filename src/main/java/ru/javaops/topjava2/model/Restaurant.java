@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.javaops.topjava2.HasId;
 
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -22,12 +23,21 @@ public class Restaurant extends NamedEntity implements HasId {
 
     public Restaurant() {
     }
+    public Restaurant(Restaurant r) {
+        this(r.id, r.name, r.dishes);
+    }
 
+    public Restaurant(Integer id, String name, List<Dish> dishes) {
+        super(id, name);
+        this.dishes = dishes;
+    }
     public Restaurant(Integer id, String name) {
         super(id, name);
+        this.dishes = Collections.emptyList();
     }
 
     public Restaurant(String name) {
         this(null, name);
+        this.dishes = Collections.emptyList();
     }
 }

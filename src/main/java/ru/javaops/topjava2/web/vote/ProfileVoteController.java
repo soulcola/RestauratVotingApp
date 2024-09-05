@@ -21,7 +21,7 @@ public class ProfileVoteController {
     private static final int USER_ID = 1;
 
     @GetMapping
-    public int get() {
+    public int getToday() {
         log.info("Get today vote for user {}", USER_ID);
         return voteService.getByDateAndUserId(LocalDate.now(), USER_ID).getRestaurantId();
     }

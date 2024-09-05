@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
@@ -14,6 +13,7 @@ import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 
 import java.net.URI;
+import java.util.List;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
@@ -23,25 +23,30 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class AdminDishController {
-    static final String REST_URL = "/api/admin/restaurants/{restaurantId}/dishes";
+    static final String REST_URL = "/api/admin/dishes";
 
     private final DishRepository repository;
     private final RestaurantRepository restaurantRepository;
 
+    @GetMapping(REST_URL + "/by-restaurant")
+    public List<Dish> getAllByRestaurantId(@RequestParam int restaurantId) {
+        log.info("get all dishes for restaurant {}", restaurantId);
+        return repository.getAllByRestaurantId(restaurantId);
+    }
+
     @GetMapping(REST_URL + "/{id}")
-    public Dish getById(@PathVariable int restaurantId,
-                        @PathVariable int id) {
-        log.info("get dish {} for restaurant {}", id, restaurantId);
-        return repository.getByIdAndRestaurantId(id, restaurantId);
+    public Dish getById(@PathVariable int id) {
+        log.info("get dish {}", id);
+        return repository.getExisted(id);
     }
 
     @PostMapping(value = REST_URL, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> create(@PathVariable int restaurantId,
-                                       @RequestBody Dish dish) {
-        log.info("Add dish to restaurant {}", restaurantId);
+    public ResponseEntity<Dish> create(@RequestBody Dish dish,
+                                       @RequestParam int restaurantId) {
+        log.info("Add dish {} to restaurant {}", dish, restaurantId);
         checkNew(dish);
-        Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
-        dish.setRestaurant(restaurant);
+        Restaurant restaurantRef = restaurantRepository.getReferenceById(restaurantId);
+        dish.setRestaurant(restaurantRef);
         Dish created = repository.save(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -51,17 +56,15 @@ public class AdminDishController {
 
     @DeleteMapping(REST_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int restaurantId,
-                       @PathVariable int id) {
-        log.info("delete dish {} for restaurant {}", id, restaurantId);
+    public void delete(@PathVariable int id) {
+        log.info("delete dish {}", id);
         repository.deleteExisted(id);
     }
 
     @PutMapping(value = REST_URL + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Transactional
     public void update(@RequestBody Dish dish,
-                       @PathVariable int restaurantId,
+                       @RequestParam int restaurantId,
                        @PathVariable int id) {
         log.info("update {} with id {} for restaurant {}", dish, id, restaurantId);
         assureIdConsistent(dish, id);
