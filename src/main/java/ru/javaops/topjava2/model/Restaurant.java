@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -19,6 +21,8 @@ import java.util.List;
 public class Restaurant extends NamedEntity implements HasId {
 
     @OneToMany(mappedBy = "restaurant")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public List<Dish> dishes;
 
     public Restaurant() {

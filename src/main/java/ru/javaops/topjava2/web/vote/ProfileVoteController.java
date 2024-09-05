@@ -29,16 +29,9 @@ public class ProfileVoteController {
     }
 
     @PostMapping
-    public int create(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+    public Vote create(@RequestBody Vote vote, @AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
-        log.info("Vote user {} for restaurant {}", userId, restaurantId);
-        return voteService.saveUserVote(restaurantId, userId, LocalDateTime.now()).getRestaurantId();
-    }
-
-    @PutMapping
-    public int update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        int userId = authUser.id();
-        log.info("Update vote user {} for restaurant {}", userId, restaurantId);
-        return voteService.saveUserVote(restaurantId, userId, LocalDateTime.now()).getRestaurantId();
+        log.info("Vote user {} for restaurant {}", userId, vote);
+        return voteService.saveUserVote(vote, userId, LocalDateTime.now());
     }
 }

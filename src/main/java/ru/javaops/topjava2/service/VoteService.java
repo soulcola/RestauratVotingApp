@@ -53,11 +53,14 @@ public class VoteService {
         return repository.save(vote);
     }
 
-    public Vote saveUserVote(int restaurantId, int userId, LocalDateTime dateTime) {
+    public Vote saveUserVote(Vote vote, int userId, LocalDateTime dateTime) {
         repository.findByDateAndUserId(dateTime.toLocalDate(), userId)
-                .ifPresent(vote -> checkVoteTime(dateTime, DEADLINE));
-        restaurantRepository.getExisted(restaurantId);
-        return repository.save(new Vote(userId, restaurantId, dateTime.toLocalDate(), dateTime.toLocalTime()));
+                .ifPresent(v -> checkVoteTime(dateTime, DEADLINE));
+        restaurantRepository.getExisted(vote.getRestaurantId());
+        vote.setUserId(userId);
+        vote.setCreatedAtDate(dateTime.toLocalDate());
+        vote.setCreatedAtTime(dateTime.toLocalTime());
+        return repository.save(vote);
     }
 
     public static void checkVoteTime(LocalDateTime dateTime, LocalTime deadline) {

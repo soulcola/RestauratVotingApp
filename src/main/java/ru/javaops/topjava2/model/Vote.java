@@ -1,8 +1,11 @@
 package ru.javaops.topjava2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -11,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -22,13 +24,12 @@ import java.time.LocalTime;
 @Setter
 public class Vote extends BaseEntity {
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Positive
     @NotNull
+    @JsonIgnore
     private Integer userId;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @Positive
     @NotNull
@@ -36,10 +37,12 @@ public class Vote extends BaseEntity {
 
     @NotNull
     @Column(name = "created_at_date")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDate createdAtDate;
 
     @NotNull
     @Column(name = "created_at_time")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, type = "String", pattern = "HH:mm:SS")
     private LocalTime createdAtTime;
 
     public Vote(Integer id, Integer userId, Integer restaurantId, LocalDate createdAtDate, LocalTime createdAtTime) {
