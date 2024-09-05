@@ -15,10 +15,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = ProfileRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProfileRestaurantController {
+@RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class UserRestaurantController {
 
-    static final String REST_URL = "/api/profile/restaurants";
+    static final String REST_URL = "/api/restaurants";
 
     private final RestaurantRepository repository;
 

@@ -12,9 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javaops.topjava2.testdata.DishTestData.DISH_MATCHER;
 import static ru.javaops.topjava2.testdata.DishTestData.todayDishes;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT_MATCHER;
-import static ru.javaops.topjava2.web.restaurant.ProfileRestaurantController.REST_URL;
+import static ru.javaops.topjava2.web.restaurant.UserRestaurantController.REST_URL;
 
-class ProfileRestaurantControllerTest extends AbstractControllerTest {
+class UserRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getToday() throws Exception {
