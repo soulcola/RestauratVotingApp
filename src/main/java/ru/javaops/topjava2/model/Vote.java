@@ -35,12 +35,10 @@ public class Vote extends BaseEntity {
     @NotNull
     private Integer restaurantId;
 
-    @NotNull
     @Column(name = "created_at_date")
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDate createdAtDate;
 
-    @NotNull
     @Column(name = "created_at_time")
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, type = "String", pattern = "HH:mm:SS")
     private LocalTime createdAtTime;

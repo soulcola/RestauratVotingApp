@@ -23,14 +23,9 @@ public class VoteService {
 
     private final RestaurantRepository restaurantRepository;
 
-    private Vote getExistedByIdAndUserId(int id, int userId) {
-        return repository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new NotFoundException("Vote with id " + id + "and user id " + userId + "not found"));
-    }
-
     public Vote getByDateAndUserId(LocalDate date, int userId) {
         return repository.findByDateAndUserId(date, userId)
-                .orElseThrow(() -> new NotFoundException("User " + userId + " don't voted today"));
+                .orElseThrow(() -> new NotFoundException("User " + userId + " didn't vote today"));
     }
 
     public Vote get(int id) {
@@ -38,7 +33,7 @@ public class VoteService {
     }
 
     public void delete(int id) {
-        repository.deleteById(id);
+        repository.deleteExisted(id);
     }
 
     public List<Vote> getAllByUserId(int userId) {
@@ -47,7 +42,7 @@ public class VoteService {
 
     public Vote create(Vote vote, int userId) {
         if (!vote.isNew()) {
-            getExistedByIdAndUserId(vote.id(), userId);
+            repository.getExisted(vote.id());
         }
         vote.setUserId(userId);
         return repository.save(vote);

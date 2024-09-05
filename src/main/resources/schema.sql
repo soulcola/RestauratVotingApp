@@ -10,6 +10,8 @@ CREATE TABLE restaurant
     id   SERIAL PRIMARY KEY,
     name VARCHAR(128) NOT NULL
 );
+CREATE UNIQUE INDEX restaurant_unique_name_idx
+    ON restaurant (name);
 
 CREATE TABLE dish
 (
@@ -17,23 +19,27 @@ CREATE TABLE dish
     name          VARCHAR(128)       NOT NULL,
     created_at    DATE DEFAULT now() NOT NULL,
     price         BIGINT             NOT NULL,
-    restaurant_id INTEGER            NOT NULL REFERENCES restaurant (id) ON DELETE CASCADE
+    restaurant_id INTEGER            NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
 );
 
 CREATE TABLE users
 (
     id         SERIAL PRIMARY KEY,
     name       VARCHAR(128)            NOT NULL,
-    email      VARCHAR(128)            NOT NULL UNIQUE,
+    email      VARCHAR(128)            NOT NULL,
     password   VARCHAR(128)            NOT NULL,
     registered TIMESTAMP DEFAULT now() NOT NULL
 );
+CREATE UNIQUE INDEX users_unique_email_idx
+    ON USERS (email);
 
 CREATE TABLE user_role
 (
-    user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
+    user_id INTEGER NOT NULL,
     role    VARCHAR(255),
-    PRIMARY KEY (user_id, role)
+    CONSTRAINT user_roles_idx UNIQUE (user_id, role),
+    FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE
 );
 
 CREATE TABLE vote
