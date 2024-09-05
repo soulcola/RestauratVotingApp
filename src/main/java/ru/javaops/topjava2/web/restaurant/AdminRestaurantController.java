@@ -7,10 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.model.Restaurant;
-import ru.javaops.topjava2.service.DishService;
-import ru.javaops.topjava2.service.RestaurantService;
+import ru.javaops.topjava2.repository.RestaurantRepository;
 
 import java.net.URI;
 import java.util.List;
@@ -20,43 +18,42 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = AdminRestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-public class AdminRestaurantRestController {
+public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
-    private final RestaurantService service;
-    private final DishService dishService;
+    private final RestaurantRepository repository;
+
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant by id: {}", id);
-        return service.get(id);
+        return repository.getExisted(id);
+    }
+    @GetMapping
+    public List<Restaurant> getAll() {
+        log.info("get all restaurants");
+        return repository.findAll();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant {}", id);
-        service.delete(id);
-    }
-
-    @GetMapping
-    public List<Restaurant> getAll() {
-        log.info("get all restaurants");
-        return service.getAll();
+        repository.deleteExisted(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         checkNew(restaurant);
-        Restaurant saved = service.save(restaurant);
+        Restaurant created = repository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
-                .buildAndExpand(saved.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(saved);
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +62,7 @@ public class AdminRestaurantRestController {
                        @PathVariable int id) {
         log.info("update {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
-        service.save(restaurant);
+        repository.getExisted(id);
+        repository.save(restaurant);
     }
 }

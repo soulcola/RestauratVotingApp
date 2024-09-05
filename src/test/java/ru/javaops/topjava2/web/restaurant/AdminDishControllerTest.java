@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Dish;
-import ru.javaops.topjava2.service.DishService;
+import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.testdata.DishTestData;
 import ru.javaops.topjava2.testdata.RestaurantTestData;
 import ru.javaops.topjava2.util.JsonUtil;
@@ -20,18 +20,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.testdata.DishTestData.*;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT1_ID;
-import static ru.javaops.topjava2.web.restaurant.AdminDishRestController.REST_URL;
-import static ru.javaops.topjava2.web.restaurant.AdminDishRestController.REST_URL_BY_REST;
+import static ru.javaops.topjava2.web.restaurant.AdminDishController.*;
 
 
-public class AdminDishRestControllerTest extends AbstractControllerTest {
+public class AdminDishControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private DishService service;
+    private DishRepository repository;
 
     @Test
     void getAllTodayByRestId() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_BY_REST, RestaurantTestData.RESTAURANT1_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL, RESTAURANT1_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -61,7 +60,7 @@ public class AdminDishRestControllerTest extends AbstractControllerTest {
     @Test
     void create() throws Exception {
         Dish newDish = DishTestData.getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_BY_REST, RestaurantTestData.RESTAURANT1_ID)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL, RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)));
 
@@ -74,9 +73,9 @@ public class AdminDishRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + "/" + DISH_1))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
-        Assertions.assertThrows(NotFoundException.class, () -> service.get(DISH_1));
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(DISH_1));
     }
 
     @Test
@@ -87,6 +86,6 @@ public class AdminDishRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
 
-        DISH_MATCHER.assertMatch(service.get(DISH_1), updated);
+        DISH_MATCHER.assertMatch(repository.getExisted(DISH_1), updated);
     }
 }

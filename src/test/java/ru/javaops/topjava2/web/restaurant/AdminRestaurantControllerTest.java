@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Restaurant;
-import ru.javaops.topjava2.service.RestaurantService;
+import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.testdata.RestaurantTestData;
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
@@ -17,13 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.*;
-import static ru.javaops.topjava2.web.restaurant.AdminRestaurantRestController.REST_URL;
+import static ru.javaops.topjava2.web.restaurant.AdminRestaurantController.REST_URL;
 
-class AdminRestaurantRestControllerTest extends AbstractControllerTest {
+class AdminRestaurantControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = REST_URL + '/';
 
     @Autowired
-    private RestaurantService service;
+    private RestaurantRepository repository;
 
     @Test
     void get() throws Exception {
@@ -35,11 +35,27 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(NOT_FOUND));
+    }
+
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + RESTAURANT1_ID))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
-        Assertions.assertThrows(NotFoundException.class, () -> service.get(RESTAURANT1_ID));
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(RESTAURANT1_ID));
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + NOT_FOUND))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
@@ -68,11 +84,35 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
 
-        RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT1_ID), updated);
+        RESTAURANT_MATCHER.assertMatch(repository.getExisted(RESTAURANT1_ID), updated);
+    }
+
+    @Test
+    void updateWrongId() throws Exception {
+        Restaurant updated = RestaurantTestData.getUpdated();
+        updated.setId(NOT_FOUND);
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity());
+
+        RESTAURANT_MATCHER.assertMatch(repository.getExisted(RESTAURANT1_ID), restaurant1);
+    }
+
+    @Test
+    void updateWrongRestaurantId() throws Exception {
+        Restaurant updated = RestaurantTestData.getUpdated();
+        updated.setId(NOT_FOUND);
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isNotFound());
+
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(NOT_FOUND));
     }
 }

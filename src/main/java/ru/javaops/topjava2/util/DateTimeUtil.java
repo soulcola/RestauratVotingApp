@@ -12,10 +12,6 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    // DB doesn't support LocalDate.MIN/MAX
-    private static final LocalDateTime MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
-    private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 0, 0);
-
     private DateTimeUtil() {
     }
 
@@ -25,12 +21,6 @@ public class DateTimeUtil {
 
     public static LocalDateTime atStartOfNextDay(LocalDate localDate) {
         return localDate.plusDays(1).atStartOfDay();
-    }
-
-    public static void checkVoteTime(LocalDateTime dateTime, LocalTime deadline) {
-        if (dateTime.toLocalTime().isAfter(deadline)){
-            throw new IllegalArgumentException("Vote already exists. You cannot update it after " + deadline);
-        }
     }
 
     public static String toString(LocalDateTime ldt) {
