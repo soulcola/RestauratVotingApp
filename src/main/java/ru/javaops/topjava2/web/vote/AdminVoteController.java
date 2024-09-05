@@ -40,7 +40,7 @@ public class AdminVoteController {
                        @RequestBody @Valid Vote vote) {
         log.info("Update vote {}", vote);
         assureIdConsistent(vote, id);
-        service.create(vote, id);
+        service.createUpdate(vote, id);
     }
 
     @DeleteMapping(REST_URL_ROOT + "/{id}")

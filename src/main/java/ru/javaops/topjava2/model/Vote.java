@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "vote")
@@ -37,16 +35,11 @@ public class Vote extends BaseEntity {
     @Column(name = "created_at_date")
     private LocalDate createdAtDate;
 
-    @NotNull
-    @Column(name = "created_at_time")
-    @Schema(type = "String", pattern = "HH:mm:SS")
-    private LocalTime createdAtTime;
 
-    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDate createdAtDate, LocalTime createdAtTime) {
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDate createdAtDate) {
         super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.createdAtDate = createdAtDate;
-        this.createdAtTime = createdAtTime;
     }
 }

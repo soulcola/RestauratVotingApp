@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class VoteService {
-    private final LocalTime DEADLINE = LocalTime.of(11, 0);
 
     private final VoteRepository repository;
 
@@ -42,7 +41,7 @@ public class VoteService {
         repository.deleteExisted(id);
     }
 
-    public Vote create(Vote vote, int userId) {
+    public Vote createUpdate(Vote vote, int userId) {
         if (!vote.isNew()) {
             repository.getExisted(vote.id());
         }
@@ -50,11 +49,15 @@ public class VoteService {
         return repository.save(vote);
     }
 
-    public VoteTo saveUserVote(VoteTo vote, int userId, LocalDateTime dateTime) {
+    public VoteTo createUpdateUserVote(VoteTo vote, int userId, LocalDateTime dateTime, LocalTime deadline) {
+        Vote newVote = new Vote(userId, vote.getRestaurantId(), dateTime.toLocalDate());
         repository.findByDateAndUserId(dateTime.toLocalDate(), userId)
-                .ifPresent(v -> checkVoteTime(dateTime, DEADLINE));
+                .ifPresent(vote1 -> {
+                    checkVoteTime(dateTime, deadline);
+                    newVote.setId(vote1.getId());
+                });
         restaurantRepository.getExisted(vote.getRestaurantId());
-        repository.save(new Vote(userId, vote.getRestaurantId(), dateTime.toLocalDate(), dateTime.toLocalTime()));
+        createUpdate(newVote, userId);
         return vote;
     }
 

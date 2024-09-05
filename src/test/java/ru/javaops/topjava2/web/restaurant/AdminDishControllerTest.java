@@ -16,10 +16,12 @@ import ru.javaops.topjava2.web.AbstractControllerTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.javaops.topjava2.TestUtil.userHttpBasic;
 import static ru.javaops.topjava2.testdata.DishTestData.*;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT1_ID;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT2_ID;
 import static ru.javaops.topjava2.web.restaurant.AdminDishController.REST_URL;
+import static ru.javaops.topjava2.web.user.UserTestData.user;
 
 
 public class AdminDishControllerTest extends AbstractControllerTest {
@@ -33,6 +35,7 @@ public class AdminDishControllerTest extends AbstractControllerTest {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID))
+                .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isCreated());
@@ -67,10 +70,10 @@ public class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + DISH_1))
+        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + DISH_1_ID))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(DISH_1));
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(DISH_1_ID));
     }
 
     @Test
@@ -83,20 +86,20 @@ public class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Dish updated = DishTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_1)
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_1_ID)
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
-        DISH_MATCHER.assertMatch(repository.getExisted(DISH_1), updated);
+        DISH_MATCHER.assertMatch(repository.getExisted(DISH_1_ID), updated);
     }
 
     @Test
     void updateNotOwn() throws Exception {
         Dish updated = DishTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_1)
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_1_ID)
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))

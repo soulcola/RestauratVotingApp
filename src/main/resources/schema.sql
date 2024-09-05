@@ -46,7 +46,6 @@ CREATE TABLE vote
 (
     id              SERIAL PRIMARY KEY,
     created_at_date date default (cast(now() as date)),
-    created_at_time time default (cast(now() as time)),
     restaurant_id   INTEGER,
     user_id         INTEGER
 );

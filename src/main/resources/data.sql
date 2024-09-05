@@ -36,10 +36,10 @@ VALUES
     ('Том Ям', CURRENT_TIMESTAMP, 45000, 3),
     ('Удон с говядиной', CURRENT_TIMESTAMP, 38000, 3);
 
-INSERT INTO vote (created_at_date, created_at_time, restaurant_id, user_id)
-VALUES ('2023-01-01', '10:00:00', 1, 1),
-       ('2023-01-01', '15:30:00', 2, 2),
-       ('2023-01-01', '19:45:00', 3, 3);
+INSERT INTO vote (created_at_date, restaurant_id, user_id)
+VALUES ('2023-01-01', 1, 1),
+       ('2023-01-01', 2, 2),
+       ('2023-01-01', 3, 3);
 
 INSERT INTO vote (restaurant_id, user_id)
 VALUES (1, 1),

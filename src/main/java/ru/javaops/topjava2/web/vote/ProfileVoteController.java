@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.javaops.topjava2.service.VoteService;
 import ru.javaops.topjava2.to.VoteTo;
+import ru.javaops.topjava2.util.VoteUtil;
 import ru.javaops.topjava2.web.AuthUser;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,6 +35,6 @@ public class ProfileVoteController {
     public VoteTo create(@RequestBody @Valid VoteTo vote, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
         log.info("Vote user {} for restaurant {}", userId, vote);
-        return voteService.saveUserVote(vote, userId, LocalDateTime.now());
+        return voteService.createUpdateUserVote(vote, userId, LocalDateTime.now(), VoteUtil.DEADLINE);
     }
 }

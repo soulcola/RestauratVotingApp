@@ -3,10 +3,15 @@ package ru.javaops.topjava2.service;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Vote;
-import ru.javaops.topjava2.testdata.RestaurantTestData;
+import ru.javaops.topjava2.to.VoteTo;
+import ru.javaops.topjava2.util.VoteUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javaops.topjava2.testdata.VoteTestData.*;
@@ -24,14 +29,20 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getByUserIdAndDate() {
-        Vote actual = service.getByDateAndUserId(vote1.getCreatedAtDate(), USER_ID);
-        VOTE_MATCHER.assertMatch(actual, vote1);
+    void getByDateAndUserId() {
+        VoteTo actual = service.getByDateAndUserId(vote1.getCreatedAtDate(), USER_ID);
+        VOTE_TO_MATCHER.assertMatch(actual, VoteUtil.createTo(vote1));
+    }
+
+    @Test
+    public void getAllByUserId() {
+        List<Vote> actual = service.getAllByUserId(USER_ID);
+        VOTE_MATCHER.assertMatch(actual, userVotes);
     }
 
     @Test
     void create() {
-        Vote created = service.saveUserVote(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now());
+        Vote created = service.createUpdate(getNew(), USER_ID);
         int newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
@@ -40,33 +51,36 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void createUserVoteTwice() {
-        service.saveUserVote(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now());
-        assertThrows(IllegalArgumentException.class, () -> service.saveUserVote(RestaurantTestData.RESTAURANT1_ID, USER_ID, LocalDateTime.now()));
+    void duplicateDateCreate() {
+        Vote todayVote = getNew();
+        todayVote.setCreatedAtDate(LocalDate.now());
+        assertThrows(DataAccessException.class, () -> service.createUpdate(todayVote, USER_ID));
     }
 
-//    @Test
-//    void update() {
-//        Vote updated = getUpdated();
-//        service.sa(updated, USER_ID, updatedDt1);
-//        VOTE_MATCHER.assertMatch(service.get(VOTE1_ID), getUpdated());
-//    }
+    @Test
+    void userVoteUpdateAfterDeadline() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.createUpdateUserVote(VoteUtil.createTo(vote1), USER_ID, LocalDateTime.now(), DEADLINE_BEFORE_NOW));
+    }
 
-//    @Test
-//    void updateAfterDeadline() {
-//        Vote updated = getUpdatedAfterDeadline();
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> service.sa(updated, USER_ID, updatedDt2));
-//    }
+    @Test
+    void userVoteUpdateBeforeDeadline() {
+        Vote updated = getUpdated();
+        VoteTo updatedTo = VoteUtil.createTo(updated);
+        service.createUpdateUserVote(updatedTo, USER_ID, LocalDateTime.now(), DEADLINE_AFTER_NOW);
+        VOTE_TO_MATCHER.assertMatch(VoteUtil.createTo(service.get(TODAY_VOTE_ID)), VoteUtil.createTo(getUpdated()));
+    }
 
-//    @Test
-//    void updateNotToday() {
-//        Vote updated = getUpdatedNotToday();
-//        Assertions.assertThrows(NotFoundException.class, () -> service.update(updated, USER_ID, updatedDt3));
-//    }
+    @Test
+    void update() {
+        Vote updated = getUpdated();
+        service.createUpdate(updated, USER_ID);
+        VOTE_MATCHER.assertMatch(service.get(VOTE1_ID), getUpdated());
+    }
 
-//    @Test
-//    void delete() {
-//        service.delete(VOTE1_ID);
-//        assertThrows(NotFoundException.class, () -> service.get(VOTE1_ID));
-//    }
+    @Test
+    void delete() {
+        service.delete(VOTE1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(VOTE1_ID));
+    }
 }
