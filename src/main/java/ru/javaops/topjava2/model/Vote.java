@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +26,6 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "user_id")
     @Positive
     @NotNull
-    @JsonIgnore
     private Integer userId;
 
     @JoinColumn(name = "restaurant_id")
@@ -35,12 +33,13 @@ public class Vote extends BaseEntity {
     @NotNull
     private Integer restaurantId;
 
+    @NotNull
     @Column(name = "created_at_date")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDate createdAtDate;
 
+    @NotNull
     @Column(name = "created_at_time")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY, type = "String", pattern = "HH:mm:SS")
+    @Schema(type = "String", pattern = "HH:mm:SS")
     private LocalTime createdAtTime;
 
     public Vote(Integer id, Integer userId, Integer restaurantId, LocalDate createdAtDate, LocalTime createdAtTime) {

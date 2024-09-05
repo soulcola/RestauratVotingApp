@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.web.vote;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class AdminVoteController {
 
     @PutMapping(value = REST_URL_ROOT + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable int id,
-                       @RequestBody Vote vote) {
+                       @RequestBody @Valid Vote vote) {
         log.info("Update vote {}", vote);
         assureIdConsistent(vote, id);
         service.create(vote, id);

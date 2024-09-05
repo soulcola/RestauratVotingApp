@@ -1,13 +1,15 @@
 package ru.javaops.topjava2.web.vote;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.javaops.topjava2.model.Vote;
 import ru.javaops.topjava2.service.VoteService;
+import ru.javaops.topjava2.to.VoteTo;
 import ru.javaops.topjava2.web.AuthUser;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,14 +24,14 @@ public class ProfileVoteController {
     private final VoteService voteService;
 
     @GetMapping
-    public Vote getToday(@AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo getToday(@AuthenticationPrincipal @ApiIgnore AuthUser authUser) {
         int userId = authUser.id();
         log.info("Get today vote for user {}", userId);
         return voteService.getByDateAndUserId(LocalDate.now(), userId);
     }
 
     @PostMapping
-    public Vote create(@RequestBody Vote vote, @AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo create(@RequestBody @Valid VoteTo vote, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
         log.info("Vote user {} for restaurant {}", userId, vote);
         return voteService.saveUserVote(vote, userId, LocalDateTime.now());

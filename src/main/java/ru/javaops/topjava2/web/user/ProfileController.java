@@ -14,6 +14,7 @@ import ru.javaops.topjava2.model.User;
 import ru.javaops.topjava2.to.UserTo;
 import ru.javaops.topjava2.util.UsersUtil;
 import ru.javaops.topjava2.web.AuthUser;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.net.URI;
 
@@ -35,7 +36,7 @@ public class ProfileController extends AbstractUserController {
     @CacheEvict(value = "userCache", allEntries = true)
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthUser authUser) {
+    public void delete(@AuthenticationPrincipal @ApiIgnore AuthUser authUser) {
         super.delete(authUser.id());
     }
 
@@ -54,7 +55,7 @@ public class ProfileController extends AbstractUserController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal @ApiIgnore AuthUser authUser) {
         log.info("update {} with id={}", userTo, authUser.id());
         assureIdConsistent(userTo, authUser.id());
         User user = get(userTo.id());

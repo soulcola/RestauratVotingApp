@@ -7,6 +7,7 @@ import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Vote;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.repository.VoteRepository;
+import ru.javaops.topjava2.to.VoteTo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,9 +24,14 @@ public class VoteService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public Vote getByDateAndUserId(LocalDate date, int userId) {
+    public VoteTo getByDateAndUserId(LocalDate date, int userId) {
         return repository.findByDateAndUserId(date, userId)
+                .map(vote -> new VoteTo(vote.getRestaurantId()))
                 .orElseThrow(() -> new NotFoundException("User " + userId + " didn't vote today"));
+    }
+
+    public List<Vote> getAllByUserId(int userId) {
+        return repository.getAllByUserId(userId);
     }
 
     public Vote get(int id) {
@@ -36,10 +42,6 @@ public class VoteService {
         repository.deleteExisted(id);
     }
 
-    public List<Vote> getAllByUserId(int userId) {
-        return repository.getAllByUserId(userId);
-    }
-
     public Vote create(Vote vote, int userId) {
         if (!vote.isNew()) {
             repository.getExisted(vote.id());
@@ -48,14 +50,12 @@ public class VoteService {
         return repository.save(vote);
     }
 
-    public Vote saveUserVote(Vote vote, int userId, LocalDateTime dateTime) {
+    public VoteTo saveUserVote(VoteTo vote, int userId, LocalDateTime dateTime) {
         repository.findByDateAndUserId(dateTime.toLocalDate(), userId)
                 .ifPresent(v -> checkVoteTime(dateTime, DEADLINE));
         restaurantRepository.getExisted(vote.getRestaurantId());
-        vote.setUserId(userId);
-        vote.setCreatedAtDate(dateTime.toLocalDate());
-        vote.setCreatedAtTime(dateTime.toLocalTime());
-        return repository.save(vote);
+        repository.save(new Vote(userId, vote.getRestaurantId(), dateTime.toLocalDate(), dateTime.toLocalTime()));
+        return vote;
     }
 
     public static void checkVoteTime(LocalDateTime dateTime, LocalTime deadline) {
