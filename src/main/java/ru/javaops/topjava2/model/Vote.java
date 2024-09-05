@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "vote")
@@ -18,7 +20,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"id", "userId", "createdAt"})
 public class Vote extends BaseEntity {
 
     //    @ManyToOne(fetch = FetchType.LAZY)
@@ -34,13 +35,18 @@ public class Vote extends BaseEntity {
     private Integer restaurantId;
 
     @NotNull
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "created_at_date")
+    private LocalDate createdAtDate;
 
-    public Vote(Integer id, int userId, int restaurantId, LocalDateTime createdAt) {
+    @NotNull
+    @Column(name = "created_at_time")
+    private LocalTime createdAtTime;
+
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDate createdAtDate, LocalTime createdAtTime) {
         super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;
-        this.createdAt = createdAt;
+        this.createdAtDate = createdAtDate;
+        this.createdAtTime = createdAtTime;
     }
 }

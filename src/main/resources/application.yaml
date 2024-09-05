@@ -1,17 +1,5 @@
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
-  profiles.active:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-  mvc:
-    view:
-      suffix: .jsp
-      prefix: /WEB-INF/jsp/
-    servlet:
-      path: /
-  messages:
-    basename: "file:config/messages/messages"
-
   jpa:
     show-sql: true
     open-in-view: false
@@ -26,38 +14,39 @@ spring:
         default_batch_fetch_size: 20
         # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
         jdbc.batch_size: 20
-        hbm2ddl.auto: none
-#      javax:
-#        persistence:
-#          schema-generation:
-#            scripts:
-#              create-target: C:/Users/vizuser/IdeaProjects/topjava2/src/create.ddl
-#              drop-target: C:/Users/vizuser/IdeaProjects/topjava2/src/drop.ddl
-#              action: drop-and-create
+        generate_statistics: true
+
+
   datasource:
     # ImMemory
-    url: jdbc:h2:mem:voting
-    #    tcp: jdbc:h2:tcp://localhost:9092/mem:voting
+    url: jdbc:h2:mem:topjava
+    #    tcp: jdbc:h2:tcp://localhost:9092/mem:topjava
+    # Absolute path
+    #    url: jdbc:h2:C:/projects/bootjava/db/topjava
+    #    tcp: jdbc:h2:tcp://localhost:9092/C:/projects/bootjava/db/topjava
+    # Relative path form current dir
+    #    url: jdbc:h2:./db/topjava
+    # Relative path from home
+    #    url: jdbc:h2:~/topjava
+    #    tcp: jdbc:h2:tcp://localhost:9092/~/topjava
     username: sa
     password:
 
   # Jackson Serialization Issue Resolver
-  jackson:
-    visibility:
-      field: any
-      getter: none
-      setter: none
-      is-getter: none
+  jackson.visibility:
+    field: any
+    getter: none
+    setter: none
+    is-getter: none
 
   # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-cache
   cache:
-    cache-names: users
-    caffeine.spec: maximumSize=1,expireAfterAccess=60s
+    cache-names: userCache, restaurantCache
 
 logging:
   level:
-    root: info
-    ru.javaops.topjava2: DEBUG
+    root: INFO
+    ru.javaops.topjava: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:
@@ -65,6 +54,5 @@ server.servlet:
     charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
     enabled: true # Enable http encoding support
     force: true
-  context-path: /
 
-#springdoc.swagger-ui.path: /
+springdoc.swagger-ui.path: /

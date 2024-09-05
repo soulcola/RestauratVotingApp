@@ -6,12 +6,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.javaops.topjava2.model.Role;
 import ru.javaops.topjava2.model.User;
+import ru.javaops.topjava2.to.UserTo;
+import ru.javaops.topjava2.util.UsersUtil;
+
+import java.io.Serial;
 
 import static java.util.Objects.requireNonNull;
 
-@Getter
 public class AuthUser extends org.springframework.security.core.userdetails.User {
 
+    @Getter
     private final User user;
 
     public AuthUser(@NonNull User user) {
@@ -21,26 +25,6 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     public int id() {
         return user.id();
-    }
-
-    public static AuthUser safeGet() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            return null;
-        }
-        return (auth.getPrincipal() instanceof AuthUser au) ? au : null;
-    }
-
-    public static AuthUser get() {
-        return requireNonNull(safeGet(), "No authorized user found");
-    }
-
-    public static User authUser() {
-        return get().getUser();
-    }
-
-    public static int authId() {
-        return get().id();
     }
 
     public boolean hasRole(Role role) {

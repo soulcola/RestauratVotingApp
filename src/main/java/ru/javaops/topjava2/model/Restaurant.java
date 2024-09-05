@@ -23,6 +23,7 @@ public class Restaurant extends NamedEntity implements HasId {
 
     public Restaurant() {
     }
+
     public Restaurant(Restaurant r) {
         this(r.id, r.name, r.dishes);
     }
@@ -31,6 +32,7 @@ public class Restaurant extends NamedEntity implements HasId {
         super(id, name);
         this.dishes = dishes;
     }
+
     public Restaurant(Integer id, String name) {
         super(id, name);
         this.dishes = Collections.emptyList();

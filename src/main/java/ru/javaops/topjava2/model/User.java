@@ -16,9 +16,8 @@ import org.springframework.util.CollectionUtils;
 import ru.javaops.topjava2.HasIdAndEmail;
 import ru.javaops.topjava2.util.validation.NoHtml;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.*;
+
 
 @Entity
 @Table(name = "users")
@@ -41,9 +40,6 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
-    private boolean enabled = true;
-
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -59,23 +55,18 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Vote> meals;
-
     public User(User u) {
-        this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);
+        this(u.id, u.name, u.email, u.password, u.registered, u.roles);
     }
 
     public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, true, new Date(), Arrays.asList(roles));
+        this(id, name, email, password, new Date(), Arrays.asList(roles));
     }
 
-    public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
     }

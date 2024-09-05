@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javaops.topjava2.util.DateTimeUtil.atStartOfDay;
-import static ru.javaops.topjava2.util.DateTimeUtil.atStartOfNextDay;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class VoteService {
     }
 
     public Vote getByDateAndUserId(LocalDate date, int userId) {
-        return repository.findByDateAndUserId(atStartOfDay(date), atStartOfNextDay(date), userId)
+        return repository.findByDateAndUserId(date, userId)
                 .orElseThrow(() -> new NotFoundException("User " + userId + " don't voted today"));
     }
 
@@ -52,16 +49,15 @@ public class VoteService {
         if (!vote.isNew()) {
             getExistedByIdAndUserId(vote.id(), userId);
         }
-//        restaurantRepository.getExisted(vote.getRestaurantId());
         vote.setUserId(userId);
         return repository.save(vote);
     }
 
     public Vote saveUserVote(int restaurantId, int userId, LocalDateTime dateTime) {
-        repository.findByDateAndUserId(atStartOfDay(dateTime.toLocalDate()), atStartOfNextDay(dateTime.toLocalDate()), userId)
+        repository.findByDateAndUserId(dateTime.toLocalDate(), userId)
                 .ifPresent(vote -> checkVoteTime(dateTime, DEADLINE));
         restaurantRepository.getExisted(restaurantId);
-        return repository.save(new Vote(userId, restaurantId, dateTime));
+        return repository.save(new Vote(userId, restaurantId, dateTime.toLocalDate(), dateTime.toLocalTime()));
     }
 
     public static void checkVoteTime(LocalDateTime dateTime, LocalTime deadline) {

@@ -25,7 +25,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getByUserIdAndDate() {
-        Vote actual = service.getByDateAndUserId(vote1.getCreatedAt().toLocalDate(), USER_ID);
+        Vote actual = service.getByDateAndUserId(vote1.getCreatedAtDate(), USER_ID);
         VOTE_MATCHER.assertMatch(actual, vote1);
     }
 
