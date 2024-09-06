@@ -9,6 +9,7 @@ import lombok.Setter;
 import ru.javaops.topjava2.HasId;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "dish")
@@ -49,12 +50,37 @@ public class Dish extends NamedEntity implements HasId {
         this(null, name, createdAt, price);
     }
 
-    @JsonProperty("price")
+//    @JsonProperty("price")
     public double getPrice() {
         return price / 100.0;
     }
 
     public void setPrice(double price) {
         this.price = (long) (price * 100);
+    }
+
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", restaurant=" + restaurant +
+                ", price=" + price +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Dish dish = (Dish) o;
+        return price == dish.price && Objects.equals(createdAt, dish.createdAt) && Objects.equals(restaurant, dish.restaurant);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), createdAt, price, restaurant);
     }
 }

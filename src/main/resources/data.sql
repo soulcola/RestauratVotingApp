@@ -23,7 +23,7 @@ INSERT INTO DISH (name, created_at, price, restaurant_id)
 VALUES
     ('Суп томатный', '2023-01-01', 15000, 1),
     ('Паста Карбонара', '2023-01-01', 30000, 1),
-    ('Мясной плов', CURRENT_TIMESTAMP, 25013, 1),
+    ('Мясной плов', CURRENT_TIMESTAMP, 25000, 1),
     ('Грибная юшка', CURRENT_TIMESTAMP, 20000, 1),
 
     ('Куриный бургер', '2023-01-01', 20000, 2),

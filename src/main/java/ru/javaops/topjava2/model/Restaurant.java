@@ -22,7 +22,7 @@ public class Restaurant extends NamedEntity implements HasId {
 
     @OneToMany(mappedBy = "restaurant")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "dishes")
     public List<Dish> dishes;
 
     public Restaurant() {

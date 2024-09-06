@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 public class VoteUtil {
 
-    public static final LocalTime DEADLINE = LocalTime.of(15, 0);
+    public static final LocalTime DEADLINE = LocalTime.of(11, 0);
 
     public static VoteTo createTo(Vote vote) {
         return new VoteTo(vote.getRestaurantId());

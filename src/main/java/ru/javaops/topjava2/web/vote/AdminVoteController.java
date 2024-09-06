@@ -36,6 +36,7 @@ public class AdminVoteController {
     }
 
     @PutMapping(value = REST_URL_ROOT + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int id,
                        @RequestBody @Valid Vote vote) {
         log.info("Update vote {}", vote);

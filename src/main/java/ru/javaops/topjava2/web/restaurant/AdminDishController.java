@@ -27,6 +27,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @Slf4j
 public class AdminDishController {
     static final String REST_URL = "/api/admin/dishes";
+    static final String REST_URL_RESTAURANT = AdminRestaurantController.REST_URL + "/{restaurantId}/dishes";
 
     private final DishRepository repository;
     private final DishService service;
@@ -44,10 +45,10 @@ public class AdminDishController {
     }
 
     @CacheEvict(value = "restaurantCache", allEntries = true)
-    @PostMapping(value = REST_URL, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = REST_URL_RESTAURANT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Dish> create(@RequestBody @Valid Dish dish,
-                                       @RequestParam int restaurantId) {
+                                       @PathVariable int restaurantId) {
         log.info("Add dish {} to restaurant {}", dish, restaurantId);
         checkNew(dish);
         dish.setCreatedAt(LocalDate.now());

@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javaops.topjava2.testdata.VoteTestData.*;
-import static ru.javaops.topjava2.web.user.UserTestData.USER_ID;
+import static ru.javaops.topjava2.testdata.UserTestData.USER_ID;
 
 @Slf4j
 class VoteServiceTest extends AbstractServiceTest {

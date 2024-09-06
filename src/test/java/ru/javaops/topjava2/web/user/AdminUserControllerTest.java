@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.web.user.AdminUserController.REST_URL;
-import static ru.javaops.topjava2.web.user.UserTestData.*;
+import static ru.javaops.topjava2.testdata.UserTestData.*;
 
 class AdminUserControllerTest extends AbstractControllerTest {
 
@@ -30,21 +30,19 @@ class AdminUserControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + ADMIN_ID))
-                .andExpect(status().isOk())
-                .andDo(print())
-                // https://jira.spring.io/browse/SPR-14472
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(admin));
+    void getById() throws Exception {
+        getById(REST_URL_SLASH, USER_ID, USER_MATCHER, user);
     }
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+        getNotFound(REST_URL_SLASH, NOT_FOUND, repository);
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        getUnauth(REST_URL_SLASH, USER_ID);
     }
 
     @Test
@@ -71,23 +69,6 @@ class AdminUserControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + NOT_FOUND))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void enableNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + NOT_FOUND)
-                .param("enabled", "false")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void getUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
     }
 
     @Test
