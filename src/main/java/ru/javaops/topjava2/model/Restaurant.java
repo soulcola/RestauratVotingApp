@@ -1,7 +1,7 @@
 package ru.javaops.topjava2.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -22,7 +22,7 @@ public class Restaurant extends NamedEntity implements HasId {
 
     @OneToMany(mappedBy = "restaurant")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "dishes")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     public List<Dish> dishes;
 
     public Restaurant() {
