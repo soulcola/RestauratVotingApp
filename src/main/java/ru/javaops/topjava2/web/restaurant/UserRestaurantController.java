@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web.restaurant;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -16,12 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Restaurant Controller")
 public class UserRestaurantController {
 
     static final String REST_URL = "/api/restaurants";
 
     private final RestaurantRepository repository;
 
+    @Operation(summary = "Get all restaurants with today dishes")
     @GetMapping
     public List<Restaurant> getToday() {
         log.info("get today's restaurants");

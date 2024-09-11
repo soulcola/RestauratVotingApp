@@ -1,15 +1,14 @@
 package ru.javaops.topjava2.web.restaurant;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Restaurant;
@@ -19,34 +18,36 @@ import ru.javaops.topjava2.service.RestaurantService;
 import java.net.URI;
 import java.util.List;
 
-import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
+import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-@Slf4j
+@Tag(name = "Admin Restaurant Controller")
 public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
     private final RestaurantRepository repository;
     private final RestaurantService service;
-    @Autowired
-    private CacheManager cacheManager;
 
-
-
+    @Operation(summary = "Get restaurant by id")
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant by id: {}", id);
         return repository.getExisted(id);
     }
+
+    @Operation(summary = "Get all restaurants")
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("get all restaurants");
         return repository.findAll();
     }
 
+    @Operation(summary = "Delete restaurant by id")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -55,6 +56,7 @@ public class AdminRestaurantController {
         repository.deleteExisted(id);
     }
 
+    @Operation(summary = "Create new restaurant")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -68,6 +70,7 @@ public class AdminRestaurantController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(summary = "Update restaurant by id")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)

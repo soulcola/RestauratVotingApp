@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web.restaurant;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
-import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.service.DishService;
 
 import java.net.URI;
@@ -21,10 +22,11 @@ import java.util.List;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-@Slf4j
+@Tag(name = "Admin Dish Controller")
 public class AdminDishController {
     static final String REST_URL = "/api/admin/dishes";
     static final String REST_URL_RESTAURANT = AdminRestaurantController.REST_URL + "/{restaurantId}/dishes";
@@ -32,18 +34,21 @@ public class AdminDishController {
     private final DishRepository repository;
     private final DishService service;
 
+    @Operation(summary = "Get all dishes by restaurant id")
     @GetMapping(REST_URL + "/by-restaurant")
     public List<Dish> getAllByRestaurantId(@RequestParam int restaurantId) {
         log.info("get all dishes for restaurant {}", restaurantId);
         return repository.getAllByRestaurantId(restaurantId);
     }
 
+    @Operation(summary = "Get dish by id")
     @GetMapping(REST_URL + "/{id}")
     public Dish getById(@PathVariable int id) {
         log.info("get dish {}", id);
         return repository.getExisted(id);
     }
 
+    @Operation(summary = "Create new dish")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @PostMapping(value = REST_URL_RESTAURANT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,6 +64,7 @@ public class AdminDishController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(summary = "Delete dish by id")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @DeleteMapping(REST_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -67,6 +73,7 @@ public class AdminDishController {
         repository.deleteExisted(id);
     }
 
+    @Operation(summary = "Update dish by id and restaurant id")
     @CacheEvict(value = "restaurantCache", allEntries = true)
     @PutMapping(value = REST_URL + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
