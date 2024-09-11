@@ -17,10 +17,8 @@ import ru.javaops.topjava2.web.AbstractControllerTest;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava2.TestUtil.userHttpBasic;
 import static ru.javaops.topjava2.testdata.RestaurantTestData.*;
 import static ru.javaops.topjava2.testdata.UserTestData.ADMIN_MAIL;
-import static ru.javaops.topjava2.testdata.UserTestData.admin;
 import static ru.javaops.topjava2.web.restaurant.AdminRestaurantController.REST_URL;
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {

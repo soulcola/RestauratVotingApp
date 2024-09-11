@@ -1,14 +1,10 @@
 package ru.javaops.topjava2.web.user;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.User;
@@ -32,7 +28,6 @@ public class AdminUserController extends AbstractUserController {
     }
 
     @Override
-    @CacheEvict(value = "userCache", allEntries = true)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -45,7 +40,6 @@ public class AdminUserController extends AbstractUserController {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
-    @CacheEvict(value = "userCache", allEntries = true)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("create {}", user);
@@ -57,7 +51,6 @@ public class AdminUserController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @CacheEvict(value = "userCache", allEntries = true)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody User user, @PathVariable int id) {

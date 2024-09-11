@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava2.web.user.AdminUserController.REST_URL;
 import static ru.javaops.topjava2.testdata.UserTestData.*;
+import static ru.javaops.topjava2.web.user.AdminUserController.REST_URL;
 
 class AdminUserControllerTest extends AbstractControllerTest {
 
@@ -136,18 +136,6 @@ class AdminUserControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWithPassword(invalid, "password")))
-                .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void updateHtmlUnsafe() throws Exception {
-        User updated = new User(user);
-        updated.setName("<script>alert(123)</script>");
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + USER_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonWithPassword(updated, "password")))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }

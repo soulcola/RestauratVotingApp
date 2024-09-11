@@ -14,7 +14,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 import ru.javaops.topjava2.HasIdAndEmail;
-import ru.javaops.topjava2.util.validation.NoHtml;
 
 import java.util.*;
 
@@ -30,7 +29,6 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @Email
     @NotBlank
     @Size(max = 128)
-    @NoHtml   // https://stackoverflow.com/questions/17480809
     private String email;
 
     @Column(name = "password", nullable = false)

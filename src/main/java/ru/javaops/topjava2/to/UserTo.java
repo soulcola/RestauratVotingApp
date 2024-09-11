@@ -2,14 +2,9 @@ package ru.javaops.topjava2.to;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Value;
-import org.hibernate.validator.constraints.Range;
 import ru.javaops.topjava2.HasIdAndEmail;
-import ru.javaops.topjava2.util.validation.NoHtml;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,13 +16,11 @@ public class UserTo extends BaseTo implements HasIdAndEmail, Serializable {
     @Getter
     @NotBlank
     @Size(min = 2, max = 100)
-    @NoHtml
     private String name;
 
     @Email
     @NotBlank
     @Size(max = 100)
-    @NoHtml // https://stackoverflow.com/questions/17480809
     private String email;
 
     @Getter

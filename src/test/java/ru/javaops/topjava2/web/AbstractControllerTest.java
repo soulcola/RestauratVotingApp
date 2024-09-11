@@ -19,9 +19,7 @@ import ru.javaops.topjava2.repository.BaseRepository;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava2.TestUtil.userHttpBasic;
 import static ru.javaops.topjava2.testdata.DishTestData.DISH_1_ID;
-import static ru.javaops.topjava2.testdata.UserTestData.admin;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

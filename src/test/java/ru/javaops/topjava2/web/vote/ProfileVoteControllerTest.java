@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.web.vote;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

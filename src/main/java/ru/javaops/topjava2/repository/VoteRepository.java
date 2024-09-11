@@ -3,12 +3,9 @@ package ru.javaops.topjava2.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javaops.topjava2.error.NotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava2.model.Vote;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

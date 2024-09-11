@@ -1,7 +1,6 @@
 package ru.javaops.topjava2.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -25,7 +24,7 @@ public class RestaurantService {
     public Restaurant save(Restaurant restaurant) {
         Assert.notNull(restaurant, "meal must not be null");
         if (!restaurant.isNew()) {
-             restaurantRepository.getExisted(restaurant.id());
+            restaurantRepository.getExisted(restaurant.id());
         }
         return restaurantRepository.save(restaurant);
     }

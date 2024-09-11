@@ -3,9 +3,7 @@ package ru.javaops.topjava2.web.restaurant;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.testdata.RestaurantTestData;
-import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,7 +16,6 @@ import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT_MATCHER
 import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT_MATCHER_WITH_DISHES;
 import static ru.javaops.topjava2.testdata.UserTestData.user;
 import static ru.javaops.topjava2.web.restaurant.UserRestaurantController.REST_URL;
-import static ru.javaops.topjava2.testdata.UserTestData.admin;
 
 class UserRestaurantControllerTest extends AbstractControllerTest {
 

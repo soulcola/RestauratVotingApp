@@ -2,7 +2,6 @@ package ru.javaops.topjava2.web.user;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,6 @@ public class ProfileController extends AbstractUserController {
         return super.get(authUser.id());
     }
 
-    @CacheEvict(value = "userCache", allEntries = true)
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal @ApiIgnore AuthUser authUser) {
@@ -51,7 +49,6 @@ public class ProfileController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @CacheEvict(value = "userCache", allEntries = true)
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional

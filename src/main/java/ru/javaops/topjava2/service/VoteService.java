@@ -41,11 +41,10 @@ public class VoteService {
         repository.deleteExisted(id);
     }
 
-    public Vote createUpdate(Vote vote, int userId) {
+    public Vote createUpdate(Vote vote) {
         if (!vote.isNew()) {
             repository.getExisted(vote.id());
         }
-        vote.setUserId(userId);
         return repository.save(vote);
     }
 
@@ -55,9 +54,10 @@ public class VoteService {
                 .ifPresent(vote1 -> {
                     checkVoteTime(dateTime, deadline);
                     newVote.setId(vote1.getId());
+                    newVote.setUserId(userId);
                 });
         restaurantRepository.getExisted(vote.getRestaurantId());
-        createUpdate(newVote, userId);
+        createUpdate(newVote);
         return vote;
     }
 

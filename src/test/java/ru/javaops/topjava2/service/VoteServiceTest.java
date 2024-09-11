@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javaops.topjava2.testdata.VoteTestData.*;
 import static ru.javaops.topjava2.testdata.UserTestData.USER_ID;
+import static ru.javaops.topjava2.testdata.VoteTestData.*;
 
 @Slf4j
 class VoteServiceTest extends AbstractServiceTest {
@@ -42,7 +42,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Vote created = service.createUpdate(getNew(), USER_ID);
+        Vote created = service.createUpdate(getNew());
         int newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
@@ -54,7 +54,7 @@ class VoteServiceTest extends AbstractServiceTest {
     void duplicateDateCreate() {
         Vote todayVote = getNew();
         todayVote.setCreatedAtDate(LocalDate.now());
-        assertThrows(DataAccessException.class, () -> service.createUpdate(todayVote, USER_ID));
+        assertThrows(DataAccessException.class, () -> service.createUpdate(todayVote));
     }
 
     @Test
@@ -74,7 +74,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void update() {
         Vote updated = getUpdated();
-        service.createUpdate(updated, USER_ID);
+        service.createUpdate(updated);
         VOTE_MATCHER.assertMatch(service.get(VOTE1_ID), getUpdated());
     }
 

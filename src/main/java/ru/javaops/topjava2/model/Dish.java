@@ -50,7 +50,7 @@ public class Dish extends NamedEntity implements HasId {
         this(null, name, createdAt, price);
     }
 
-//    @JsonProperty("price")
+    //    @JsonProperty("price")
     public double getPrice() {
         return price / 100.0;
     }

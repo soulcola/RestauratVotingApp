@@ -24,7 +24,7 @@ public class VoteTestData {
     public static final LocalTime DEADLINE_AFTER_NOW = LocalTime.now().plusMinutes(1);
     public static final LocalTime DEADLINE_BEFORE_NOW = LocalTime.now().minusMinutes(1);
 
-    public static final Vote vote1 = new Vote(VOTE1_ID, USER_ID, RESTAURANT1_ID, LocalDate.of(2023, 1,1));
+    public static final Vote vote1 = new Vote(VOTE1_ID, USER_ID, RESTAURANT1_ID, LocalDate.of(2023, 1, 1));
     public static final Vote todayVote1 = new Vote(TODAY_VOTE_ID, USER_ID, RESTAURANT1_ID, LocalDate.now());
 
     public static final List<Vote> userVotes = List.of(vote1, todayVote1);

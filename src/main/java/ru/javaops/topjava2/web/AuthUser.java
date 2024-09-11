@@ -2,16 +2,8 @@ package ru.javaops.topjava2.web;
 
 import lombok.Getter;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.javaops.topjava2.model.Role;
 import ru.javaops.topjava2.model.User;
-import ru.javaops.topjava2.to.UserTo;
-import ru.javaops.topjava2.util.UsersUtil;
-
-import java.io.Serial;
-
-import static java.util.Objects.requireNonNull;
 
 public class AuthUser extends org.springframework.security.core.userdetails.User {
 
@@ -25,6 +17,10 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     public int id() {
         return user.id();
+    }
+
+    public String email() {
+        return user.getEmail();
     }
 
     public boolean hasRole(Role role) {

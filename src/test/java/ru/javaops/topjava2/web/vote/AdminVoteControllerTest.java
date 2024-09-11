@@ -12,28 +12,24 @@ import ru.javaops.topjava2.error.NotFoundException;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.model.Vote;
 import ru.javaops.topjava2.repository.VoteRepository;
-import ru.javaops.topjava2.testdata.DishTestData;
 import ru.javaops.topjava2.testdata.RestaurantTestData;
+import ru.javaops.topjava2.testdata.UserTestData;
 import ru.javaops.topjava2.testdata.VoteTestData;
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
-import ru.javaops.topjava2.testdata.UserTestData;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.TestUtil.userHttpBasic;
-import static ru.javaops.topjava2.testdata.DishTestData.*;
-import static ru.javaops.topjava2.testdata.DishTestData.DISH_1_ID;
-import static ru.javaops.topjava2.testdata.RestaurantTestData.*;
+import static ru.javaops.topjava2.testdata.UserTestData.ADMIN_MAIL;
+import static ru.javaops.topjava2.testdata.UserTestData.admin;
 import static ru.javaops.topjava2.testdata.VoteTestData.*;
-import static ru.javaops.topjava2.testdata.VoteTestData.NOT_FOUND;
-import static ru.javaops.topjava2.testdata.UserTestData.*;
 import static ru.javaops.topjava2.web.vote.ProfileVoteController.REST_URL;
 
 class AdminVoteControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = AdminVoteController.REST_URL_ROOT + '/';
-    private static final String REST_URL_USER_SLASH = AdminVoteController.REST_URL_USER ;
+    private static final String REST_URL_USER_SLASH = AdminVoteController.REST_URL_USER;
 
 
     @Autowired
