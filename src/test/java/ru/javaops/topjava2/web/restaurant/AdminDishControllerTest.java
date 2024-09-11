@@ -22,7 +22,6 @@ import static ru.javaops.topjava2.testdata.RestaurantTestData.RESTAURANT2_ID;
 import static ru.javaops.topjava2.testdata.UserTestData.ADMIN_MAIL;
 import static ru.javaops.topjava2.testdata.UserTestData.admin;
 import static ru.javaops.topjava2.web.restaurant.AdminDishController.REST_URL;
-import static ru.javaops.topjava2.web.restaurant.AdminDishController.REST_URL_RESTAURANT;
 
 
 public class AdminDishControllerTest extends AbstractControllerTest {
@@ -65,7 +64,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Dish newDish = DishTestData.getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT, RESTAURANT1_ID)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT1_ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isCreated());
@@ -81,7 +81,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void createForInvalidRestaurant() throws Exception {
         Dish newDish = DishTestData.getNew();
-        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT, NOT_FOUND)
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(NOT_FOUND))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isConflict())
@@ -92,7 +93,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void createInvalid() throws Exception {
         Dish newDish = new Dish("", null, 0);
-        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT, RESTAURANT1_ID)
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT1_ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isUnprocessableEntity())
