@@ -15,7 +15,8 @@ spring:
         # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
         jdbc.batch_size: 20
         generate_statistics: false
-
+  main:
+    allow-circular-references: true
 
   datasource:
     # ImMemory

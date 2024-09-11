@@ -27,7 +27,7 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 - Run: `mvn spring-boot:run` in root directory.
 -----------------------------------------------------
 [REST API documentation](http://localhost:8080/)  
-Креденшелы:
+Test credentials:
 ```
 User:  user@yandex.ru / password
 Admin: admin@gmail.com / admin

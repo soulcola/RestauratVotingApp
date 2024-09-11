@@ -2,11 +2,15 @@ package ru.javaops.topjava2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import ru.javaops.topjava2.HasId;
+import ru.javaops.topjava2.config.MoneyDeserializer;
+import ru.javaops.topjava2.config.MoneySerializer;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -24,6 +28,8 @@ public class Dish extends NamedEntity implements HasId {
 
     @Column(name = "price", nullable = false)
     @Positive
+    @JsonDeserialize(using = MoneyDeserializer.class)
+    @JsonSerialize(using = MoneySerializer.class)
     private long price;
 
 
@@ -48,15 +54,6 @@ public class Dish extends NamedEntity implements HasId {
 
     public Dish(String name, LocalDate createdAt, long price) {
         this(null, name, createdAt, price);
-    }
-
-    //    @JsonProperty("price")
-    public double getPrice() {
-        return price / 100.0;
-    }
-
-    public void setPrice(double price) {
-        this.price = (long) (price * 100);
     }
 
     @Override
