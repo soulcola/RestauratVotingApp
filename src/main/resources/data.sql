@@ -5,7 +5,7 @@ DELETE FROM dish;
 
 
 INSERT INTO users (name, email, password)
-VALUES ('User', 'user@yandex.ru', '{noop}password'),
+VALUES ('User', 'user@yandex.com', '{noop}password'),
        ('Admin', 'admin@gmail.com', '{noop}admin'),
        ('Guest', 'guest@gmail.com', '{noop}guest');
 

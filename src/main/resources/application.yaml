@@ -44,7 +44,7 @@ spring:
 logging:
   level:
     root: INFO
-    ru.javaops.topjava: DEBUG
+    com.javaops.topjava: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:

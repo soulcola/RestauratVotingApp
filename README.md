@@ -31,7 +31,7 @@ Swagger UI link
 [REST API documentation](http://localhost:8080/)  
 Test credentials:
 ```
-User:  user@yandex.ru / password
+User:  user@yandex.com / password
 Admin: admin@gmail.com / admin
 Guest: guest@gmail.com / guest
 ```
