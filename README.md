@@ -1,3 +1,4 @@
+## [Deployed Instance - link to swagger](http://votingapp.petrtitov.com/swagger-ui/index.html)
 ##  Technical requirement:
 Design and implement a REST API using Hibernate/Spring/SpringMVC (Spring-Boot preferred!) **without frontend**.
 
@@ -35,3 +36,4 @@ User:  user@yandex.com / password
 Admin: admin@gmail.com / admin
 Guest: guest@gmail.com / guest
 ```
+
