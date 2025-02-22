@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 )
 @OpenAPIDefinition(
         info = @Info(
-                title = "REST API documentation",
+                title = "REST API documentation test",
                 version = "1.0",
                 description = """
                         <p><b>Тестовые креденшелы:</b><br>
