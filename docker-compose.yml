@@ -1,0 +1,10 @@
+version: '3'
+services:
+  voting-app:
+    container_name: voting-app
+    build:
+      context: .
+      dockerfile:  Dockerfile
+    ports:
+      - 8883:8080/tcp
+    restart: unless-stopped
